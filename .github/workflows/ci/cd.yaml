@@ -1,0 +1,38 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 0483
+          POSTGRES_DB: db_teachme
+        ports:
+          - 5442:5432
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and run services
+        run: |
+          docker-compose up -d --build
+          
+      - name: Run tests
+        run: |
+          docker-compose exec teachmeapp pytest  # Replace with your testing command
+
+      - name: Shut down services
+        run: docker-compose down
