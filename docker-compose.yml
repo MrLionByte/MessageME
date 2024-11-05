@@ -4,11 +4,11 @@ services:
   teachme_postgres:
     image: postgres:latest
     environment:
-      POSTGRES_USER: postgres  # Ensure this is set correctly
-      POSTGRES_PASSWORD: 0483   # Your password
-      POSTGRES_DB: db_teachme    # Your database
+      POSTGRES_USER: postgres  
+      POSTGRES_PASSWORD: 0483  
+      POSTGRES_DB: db_teachme    
     ports:
-      - "5442:5432"  # Exposing the database on port 5442
+      - "5442:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -26,6 +26,8 @@ services:
       - teachme_postgres
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app
 
 volumes:
   postgres_data:

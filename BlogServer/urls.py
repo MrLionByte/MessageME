@@ -20,5 +20,5 @@ from messager_app import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('messager/',include('messager_app.urls')),
+    path('',include('messager_app.urls')),
 ]
