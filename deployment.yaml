@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teachme-app
+spec:
+  selector:
+    matchLabels:
+      app: teachme-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: teachme-app
+    spec:
+      containers:
+      - name: teachme-app
+        image: mrlionbyte/teachmeapp:latest
+        ports:
+        - containerPort: 8000  # Change to match the internal port used by the app
+        env:
+        - name: DATABASE_NAME
+          value: "db_teachme"
+        - name: DATABASE_USER
+          value: "postgres"
+        - name: DATABASE_PASSWORD
+          value: "0483"
+        - name: DATABASE_HOST
+          value: "postgres"  # Match the PostgreSQL service name
+        - name: DATABASE_PORT
+          value: "5432"      # Match the PostgreSQL container's port
+        command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]  # Use the correct port here
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teachme-app
+spec:
+  type: NodePort
+  ports:
+    - port: 8000         # This is the service port
+      targetPort: 8000   # This matches the internal port
+      nodePort: 30027    # Adjust this port as needed (between 30000-32767)
+  selector:
+    app: teachme-app
