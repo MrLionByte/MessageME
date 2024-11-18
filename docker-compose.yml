@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: 0483  
       POSTGRES_DB: db_teachme    
     ports:
-      - "5442:5432"
+      - "5445:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
