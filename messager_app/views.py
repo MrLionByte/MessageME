@@ -58,11 +58,13 @@ class MessageView(View):
         user = User.objects.get(pk=USER_ID)
         if message:
             new_message = Messages.objects.create(user = user,message=message)
-            return JsonResponse({
+            to_send = {
                 'id': new_message.id,
                 'message': new_message.message,
                 'created_on': new_message.created_on,
-                'user': new_message.user.username if new_message.user else None
-            }, status=201)
+                'user': new_message.user.username
+            }
+            print(to_send)
+            return JsonResponse(to_send, status=201)
 
         return JsonResponse({'error': 'Message content is required.'}, status=400)

@@ -10,3 +10,7 @@ class Messages(models.Model):
     message = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     
+    def __str__(self) -> str:
+        return f"Messaged by {self.user}"
+
+    
