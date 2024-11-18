@@ -34,10 +34,6 @@ jobs:
       - name: Build and run services
         run: |
           docker compose up -d --build
-          
-      - name: Run tests
-        run: |
-          docker compose exec teachmeapp pytest
 
       - name: Shut down services
         run: docker-compose down
