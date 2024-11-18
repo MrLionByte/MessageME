@@ -34,15 +34,18 @@ jobs:
 
       - name: Build and run services
         run: |
-          docker compose up -d --build
+          cd $GITHUB_WORKSPACE
+          docker compose -f docker-compose.yml up -d --build
 
       - name: Wait for the service to be ready
         run: |
-          docker compose exec -T teachmeapp bash -c 'while ! pg_isready -h teachme_postgres -p 5432; do sleep 1; done'
+          docker compose -f docker-compose.yml exec -T teachmeapp bash -c 'while ! pg_isready -h teachme_postgres -p 5432; do sleep 1; done'
 
       - name: Run tests
         run: |
-          docker compose exec -T teachmeapp pytest
+          docker compose -f docker-compose.yml exec -T teachmeapp pytest
 
       - name: Shut down services
-        run: docker compose down
+        run: |
+          docker compose -f docker-compose.yml down
+          
