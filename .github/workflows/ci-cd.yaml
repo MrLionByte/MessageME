@@ -17,35 +17,22 @@ jobs:
           POSTGRES_PASSWORD: 0483
           POSTGRES_DB: db_teachme
         ports:
-          - "5445:5432"
-        volumes:
-          - postgres_data:/var/lib/postgresql/data
+          - 5442:5432
 
     steps:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Set up Docker Build
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
-      - name: Set up Docker Compose
-        run: |
-          sudo apt-get install docker-compose
 
       - name: Build and run services
         run: |
-          cd $GITHUB_WORKSPACE
-          docker compose -f docker-compose.yml up -d --build
-
-      - name: Wait for the service to be ready
-        run: |
-          docker compose -f docker-compose.yml exec -T teachmeapp bash -c 'while ! pg_isready -h teachme_postgres -p 5432; do sleep 1; done'
-
+          docker-compose up -d --build
+          
       - name: Run tests
         run: |
-          docker compose -f docker-compose.yml exec -T teachmeapp pytest
+          docker-compose exec teachmeapp pytest
 
       - name: Shut down services
-        run: |
-          docker compose -f docker-compose.yml down
-          
+        run: docker-compose down
