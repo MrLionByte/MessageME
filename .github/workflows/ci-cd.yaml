@@ -9,16 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 0483
-          POSTGRES_DB: db_teachme
-        ports:
-          - 5432:5432
-
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -31,9 +21,17 @@ jobs:
           curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
 
-      - name: Build Docker image
+      - name: Build services
         run: |
-          docker build -t message_me:latest .
+          docker compose build
+
+      - name: Start PostgreSQL service
+        run: |
+          docker compose up -d teachme_postgres
+
+      - name: Start all services
+        run: |
+          docker compose up -d
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
