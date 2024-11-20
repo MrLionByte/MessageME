@@ -16,6 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: mrlionbyte/teachmeapp:latest
     environment:
       DATABASE_HOST: teachme_postgres
       DATABASE_PORT: 5432
